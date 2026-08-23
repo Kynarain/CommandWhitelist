@@ -1,6 +1,6 @@
 # CommandWhitelist
 
-CommandWhitelist 是一个 Fabric 服务端 Mod，适用于 Minecraft 1.20.6。它允许服务器管理员（OP）通过游戏内命令 `/cw` 将某些**根命令**或**完整命令**加入白名单，使普通玩家无需获得 OP 权限即可使用这些命令。
+CommandWhitelist 是一个 Fabric 服务端 Mod。它允许服务器管理员（OP）通过游戏内命令 `/cw` 将某些**根命令**或**完整命令**加入白名单，使普通玩家无需获得 OP 权限即可使用这些命令。
 
 ## 功能
 
