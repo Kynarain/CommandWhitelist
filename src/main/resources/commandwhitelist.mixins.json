@@ -2,6 +2,11 @@
   "required": true,
   "package": "cn.kynarain.commandwhitelist.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["CommandNodeMixin"],
-  "injectors": { "defaultRequire": 1 }
+  "mixins": [
+    "ServerPlayNetworkHandlerMixin",
+    "ServerCommandSourceMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
