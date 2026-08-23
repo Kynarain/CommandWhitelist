@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "commandwhitelist",
+  "version": "${version}",
+  "name": "CommandWhitelist",
+  "description": "允许服务器 OP 指定某些根命令或完整命令，让普通玩家无需权限即可使用。",
+  "authors": ["Kynarain"],
+  "license": "MIT",
+  "environment": "server",
+  "entrypoints": {
+    "main": ["cn.kynarain.commandwhitelist.CommandWhitelistMod"]
+  },
+  "mixins": [
+    "commandwhitelist.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "~1.20.6"
+  }
+}
