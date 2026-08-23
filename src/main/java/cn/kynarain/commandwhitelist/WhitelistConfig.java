@@ -18,9 +18,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WhitelistConfig {
-    private static final Logger LOGGER = LoggerFactory.getLogger("CommandWhitelist");
+    private static final Logger LOGGER = LoggerFactory.getLogger("cmdwhitelist");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("commandwhitelist.json");
+    private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("cmdwhitelist.json");
 
     private static final Set<String> rootCommands = ConcurrentHashMap.newKeySet();
     private static final Set<String> fullCommands = ConcurrentHashMap.newKeySet();
@@ -43,11 +43,11 @@ public class WhitelistConfig {
                 if (data.fullCommands != null) {
                     fullCommands.addAll(data.fullCommands);
                 }
-                LOGGER.info("[CommandWhitelist] Loaded {} root command(s) and {} full command(s)",
+                LOGGER.info("[cmdwhitelist] Loaded {} root command(s) and {} full command(s)",
                         rootCommands.size(), fullCommands.size());
             }
         } catch (Exception e) {
-            LOGGER.error("[CommandWhitelist] Failed to load config", e);
+            LOGGER.error("[cmdwhitelist] Failed to load config", e);
         }
     }
 
@@ -62,7 +62,7 @@ public class WhitelistConfig {
                 GSON.toJson(data, writer);
             }
         } catch (IOException e) {
-            LOGGER.error("[CommandWhitelist] Failed to save config", e);
+            LOGGER.error("[cmdwhitelist] Failed to save config", e);
         }
     }
 
@@ -75,6 +75,15 @@ public class WhitelistConfig {
             fullCommand = fullCommand.substring(1);
         }
         return fullCommands.contains(fullCommand);
+    }
+
+    public static boolean isFullCommandPrefixAllowed(String prefix) {
+        for (String fullCmd : fullCommands) {
+            if (fullCmd.equals(prefix) || fullCmd.startsWith(prefix + " ")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean addRootCommand(String command) {

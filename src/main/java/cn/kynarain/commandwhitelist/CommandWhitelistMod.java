@@ -7,12 +7,20 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommandWhitelistMod implements ModInitializer {
-    public static final String MOD_ID = "commandwhitelist";
+    public static final String MOD_ID = "cmdwhitelist";
+    private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
     public void onInitialize() {
+        LOGGER.warn("==============================================");
+        LOGGER.warn("Command Whitelist is a PRE-RELEASE version!");
+        LOGGER.warn("This mod is NOT production ready. Use at your own risk.");
+        LOGGER.warn("==============================================");
+
         WhitelistConfig.load();
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
@@ -25,7 +33,6 @@ public class CommandWhitelistMod implements ModInitializer {
                 CommandManager.literal("cw")
                         .requires(source -> source.hasPermissionLevel(2))
 
-                        // /cw list
                         .then(CommandManager.literal("list")
                                 .executes(ctx -> {
                                     var roots = WhitelistConfig.getRootCommands();
@@ -51,7 +58,6 @@ public class CommandWhitelistMod implements ModInitializer {
                                     return 1;
                                 }))
 
-                        // /cw reload
                         .then(CommandManager.literal("reload")
                                 .executes(ctx -> {
                                     WhitelistConfig.load();
@@ -59,20 +65,17 @@ public class CommandWhitelistMod implements ModInitializer {
                                     return 1;
                                 }))
 
-                        // /cw remove <rootCommand>
                         .then(CommandManager.literal("remove")
                                 .then(CommandManager.argument("rootCommand", StringArgumentType.word())
                                         .executes(ctx -> {
                                             String command = StringArgumentType.getString(ctx, "rootCommand");
                                             boolean removed = WhitelistConfig.removeRootCommand(command);
-                                            final String finalCommand = command; // 确保 effectively final
                                             ctx.getSource().sendFeedback(() -> Text.literal(
-                                                    removed ? "§a已移除根命令白名单: /" + finalCommand : "§e该根命令不在白名单中: /" + finalCommand
+                                                    removed ? "§a已移除根命令白名单: /" + command : "§e该根命令不在白名单中: /" + command
                                             ), false);
                                             return removed ? 1 : 0;
                                         })))
 
-                        // /cw c <fullCommand>
                         .then(CommandManager.literal("c")
                                 .then(CommandManager.argument("fullCommand", StringArgumentType.greedyString())
                                         .executes(ctx -> {
@@ -100,9 +103,8 @@ public class CommandWhitelistMod implements ModInitializer {
                                 .executes(ctx -> {
                                     String command = StringArgumentType.getString(ctx, "rootCommand");
                                     boolean added = WhitelistConfig.addRootCommand(command);
-                                    final String finalCommand = command; // 确保 effectively final
                                     ctx.getSource().sendFeedback(() -> Text.literal(
-                                            added ? "§a已添加根命令白名单: /" + finalCommand : "§e该根命令已在白名单中: /" + finalCommand
+                                            added ? "§a已添加根命令白名单: /" + command : "§e该根命令已在白名单中: /" + command
                                     ), false);
                                     return added ? 1 : 0;
                                 }))
