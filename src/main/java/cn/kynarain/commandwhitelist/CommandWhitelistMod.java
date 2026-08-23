@@ -16,10 +16,6 @@ public class CommandWhitelistMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        LOGGER.warn("==============================================");
-        LOGGER.warn("Command Whitelist is a PRE-RELEASE version!");
-        LOGGER.warn("This mod is NOT production ready. Use at your own risk.");
-        LOGGER.warn("==============================================");
 
         WhitelistConfig.load();
 

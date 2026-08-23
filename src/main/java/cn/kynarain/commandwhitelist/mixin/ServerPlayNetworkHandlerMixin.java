@@ -20,7 +20,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
         if (player == null) return;
 
         String message = packet.chatMessage();
-        if (!message.startsWith("/")) return; // 只处理命令
+        if (!message.startsWith("/")) return;
 
         String command = message.substring(1);
         String rootCommand = command.split(" ")[0];
