@@ -16,12 +16,9 @@ public class CommandWhitelistMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-
         WhitelistConfig.load();
-
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            registerCommands(dispatcher);
-        });
+        LOGGER.info("cmdwhitelist is initializing");
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> registerCommands(dispatcher));
     }
 
     private void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
