@@ -38,10 +38,18 @@ public class WhitelistConfig {
             ConfigData data = GSON.fromJson(reader, ConfigData.class);
             if (data != null) {
                 if (data.rootCommands != null) {
-                    rootCommands.addAll(data.rootCommands);
+                    for (String cmd : data.rootCommands) {
+                        if (cmd != null && !cmd.isEmpty()) {
+                            rootCommands.add(cmd.toLowerCase());
+                        }
+                    }
                 }
                 if (data.fullCommands != null) {
-                    fullCommands.addAll(data.fullCommands);
+                    for (String cmd : data.fullCommands) {
+                        if (cmd != null && !cmd.isEmpty()) {
+                            fullCommands.add(cmd.toLowerCase());
+                        }
+                    }
                 }
                 LOGGER.info("[cmdwhitelist] Loaded {} root command(s) and {} full command(s)",
                         rootCommands.size(), fullCommands.size());
@@ -67,19 +75,26 @@ public class WhitelistConfig {
     }
 
     public static boolean isRootCommandAllowed(String rootCommand) {
-        return rootCommands.contains(rootCommand);
+        if (rootCommand == null) return false;
+        return rootCommands.contains(rootCommand.toLowerCase());
     }
 
     public static boolean isFullCommandAllowed(String fullCommand) {
-        if (fullCommand.startsWith("/")) {
-            fullCommand = fullCommand.substring(1);
-        }
-        return fullCommands.contains(fullCommand);
+        if (fullCommand == null) return false;
+        String cmd = fullCommand.startsWith("/") ? fullCommand.substring(1) : fullCommand;
+        return fullCommands.contains(cmd.toLowerCase());
     }
 
+    /**
+     * 检查给定字面量路径是否匹配完整命令白名单中的某个条目，
+     * 或者作为某个条目的前缀（用于放行完整命令的子节点）。
+     * 此方法在根命令白名单方案下可选，保留以兼容可能的需求。
+     */
     public static boolean isFullCommandPrefixAllowed(String prefix) {
+        if (prefix == null) return false;
+        String p = prefix.toLowerCase();
         for (String fullCmd : fullCommands) {
-            if (fullCmd.equals(prefix) || fullCmd.startsWith(prefix + " ")) {
+            if (fullCmd.equals(p) || fullCmd.startsWith(p + " ")) {
                 return true;
             }
         }
@@ -87,31 +102,33 @@ public class WhitelistConfig {
     }
 
     public static boolean addRootCommand(String command) {
-        boolean added = rootCommands.add(command);
+        if (command == null || command.isEmpty()) return false;
+        String cmd = command.startsWith("/") ? command.substring(1) : command;
+        boolean added = rootCommands.add(cmd.toLowerCase());
         if (added) save();
         return added;
     }
 
     public static boolean removeRootCommand(String command) {
-        boolean removed = rootCommands.remove(command);
+        if (command == null || command.isEmpty()) return false;
+        String cmd = command.startsWith("/") ? command.substring(1) : command;
+        boolean removed = rootCommands.remove(cmd.toLowerCase());
         if (removed) save();
         return removed;
     }
 
     public static boolean addFullCommand(String command) {
-        if (command.startsWith("/")) {
-            command = command.substring(1);
-        }
-        boolean added = fullCommands.add(command);
+        if (command == null || command.isEmpty()) return false;
+        String cmd = command.startsWith("/") ? command.substring(1) : command;
+        boolean added = fullCommands.add(cmd.toLowerCase());
         if (added) save();
         return added;
     }
 
     public static boolean removeFullCommand(String command) {
-        if (command.startsWith("/")) {
-            command = command.substring(1);
-        }
-        boolean removed = fullCommands.remove(command);
+        if (command == null || command.isEmpty()) return false;
+        String cmd = command.startsWith("/") ? command.substring(1) : command;
+        boolean removed = fullCommands.remove(cmd.toLowerCase());
         if (removed) save();
         return removed;
     }
