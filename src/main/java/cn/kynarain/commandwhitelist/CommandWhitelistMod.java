@@ -124,6 +124,7 @@ public class CommandWhitelistMod implements ModInitializer {
         );
     }
 
+
     private static void applyWhitelist() {
         if (dispatcher == null) return;
 
@@ -144,7 +145,7 @@ public class CommandWhitelistMod implements ModInitializer {
             if (parts.length == 0) continue;
             String rootName = parts[0];
             if (WhitelistConfig.isRootCommandAllowed(rootName)) {
-                continue; // 根命令已放行
+                continue;
             }
             CommandNode<ServerCommandSource> node = findNode(dispatcher.getRoot(), parts);
             if (node != null) {
@@ -152,7 +153,6 @@ public class CommandWhitelistMod implements ModInitializer {
             }
         }
     }
-
 
 
     private static void restoreOriginalRequirements() {
@@ -180,6 +180,7 @@ public class CommandWhitelistMod implements ModInitializer {
     }
 
 
+
     private static void setRequirementDirect(CommandNode<ServerCommandSource> node, Predicate<ServerCommandSource> requirement) {
         try {
             Field field = CommandNode.class.getDeclaredField("requirement");
@@ -204,7 +205,6 @@ public class CommandWhitelistMod implements ModInitializer {
             return source -> false;
         }
     }
-
 
     private static CommandNode<ServerCommandSource> findNode(CommandNode<ServerCommandSource> root, String[] pathParts) {
         CommandNode<ServerCommandSource> current = root;
